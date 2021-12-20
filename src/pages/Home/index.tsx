@@ -34,14 +34,24 @@ const Home = (): JSX.Element => {
 
   useEffect(() => {
     async function loadProducts() {
-      const response = await api.get<Product[]>("products");
+      // const response = await api.get<Product[]>("products");
 
-      const data = response.data.map((product) => ({
+      // const data = response.data.map((product) => ({
+      //   ...product,
+      //   priceFormatted: formatPrice(product.price),
+      // }));
+
+      // setProducts(data);
+
+      const response = await api.get("products");
+
+      const products: Product[] = response.data;
+      const formattedProducts = products.map((product) => ({
         ...product,
         priceFormatted: formatPrice(product.price),
       }));
 
-      setProducts(data);
+      setProducts(formattedProducts);
     }
 
     loadProducts();
@@ -55,10 +65,7 @@ const Home = (): JSX.Element => {
     <ProductList>
       {products.map((product) => (
         <li key={product.id}>
-          <img
-            src={product.image}
-            alt={product.title}
-          />
+          <img src={product.image} alt={product.title} />
           <strong>{product.title}</strong>
           <span>{product.priceFormatted}</span>
           <button
